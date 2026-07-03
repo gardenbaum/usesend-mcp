@@ -1,0 +1,69 @@
+name: Bug report
+description: Report a problem with usesend-mcp
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report. Please **do not include
+        your useSend API key** or any other secret in this issue.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected instead.
+      placeholder: When I call the tool X with ..., it returns ... but I expected ...
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps, the tool call/arguments, and the MCP client you used.
+      placeholder: |
+        1. Configure the server with ...
+        2. Call `usesend_...` with ...
+        3. See error ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: usesend-mcp version
+      description: Output of `uvx usesend-mcp --version`, the PyPI version, or image tag.
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How are you running it?
+      options:
+        - uvx / pip (PyPI)
+        - Docker image
+        - From source
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: client
+    attributes:
+      label: MCP client
+      placeholder: "Claude Code, Claude Desktop, Cursor, ..."
+    validations:
+      required: false
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "3.13.x"
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs (stderr)
+      description: Paste any stderr output. **Redact your API key and any addresses you consider private.**
+      render: shell
+    validations:
+      required: false

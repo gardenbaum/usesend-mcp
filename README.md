@@ -1,5 +1,8 @@
 # usesend-mcp
 
+[![CI](https://github.com/gardenbaum/usesend-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/gardenbaum/usesend-mcp/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/usesend-mcp.svg)](https://pypi.org/project/usesend-mcp/)
+[![Docker Hub](https://img.shields.io/docker/v/gardenbaum/usesend-mcp?logo=docker&label=docker%20hub&sort=semver)](https://hub.docker.com/r/gardenbaum/usesend-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/release/python-3130/)
 [![uv](https://img.shields.io/badge/package%20manager-uv-de5fe9)](https://docs.astral.sh/uv/)
@@ -25,10 +28,12 @@ USESEND_API_KEY=us_your_api_key_here uvx usesend-mcp
 ### Docker
 
 ```bash
-docker run -i --rm -e USESEND_API_KEY=us_your_api_key_here ghcr.io/gardenbaum/usesend-mcp
+docker run -i --rm -e USESEND_API_KEY=us_your_api_key_here gardenbaum/usesend-mcp
 ```
 
 The `-i` flag is required: MCP over stdio needs an interactive stdin/stdout stream, and `--rm` cleans up the container on exit.
+
+Images are published to [Docker Hub](https://hub.docker.com/r/gardenbaum/usesend-mcp) (`gardenbaum/usesend-mcp`) and mirrored to the GitHub Container Registry (`ghcr.io/gardenbaum/usesend-mcp`), for `linux/amd64` and `linux/arm64`.
 
 ## API key
 
@@ -150,7 +155,7 @@ Any of the JSON-based clients above can run the server from the container image 
   "mcpServers": {
     "usesend": {
       "command": "docker",
-      "args": ["run", "-i", "--rm", "-e", "USESEND_API_KEY", "ghcr.io/gardenbaum/usesend-mcp"],
+      "args": ["run", "-i", "--rm", "-e", "USESEND_API_KEY", "gardenbaum/usesend-mcp"],
       "env": {
         "USESEND_API_KEY": "us_your_api_key_here"
       }
@@ -261,6 +266,16 @@ The server communicates over stdio, so `stdout` is reserved exclusively for the 
 
 Architecturally significant decisions are recorded as lightweight ADRs in [`docs/adr/`](docs/adr/).
 
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the
+development setup and quality bar, and note our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Security
+
+Please report vulnerabilities privately — see [SECURITY.md](SECURITY.md). Do **not**
+open a public issue for security problems.
+
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) © gardenbaum
