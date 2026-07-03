@@ -1,0 +1,2132 @@
+# serializer version: 1
+# name: test_capability_surface_contract
+  dict({
+    'prompts': list([
+    ]),
+    'resource_templates': list([
+    ]),
+    'resources': list([
+    ]),
+    'tools': list([
+      dict({
+        'annotations': dict({
+          'title': 'Batch send emails',
+        }),
+        'description': 'Send up to 100 emails in a single request.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'emails': dict({
+              'items': dict({
+                'description': 'One item of a batch-send request.',
+                'properties': dict({
+                  'bcc': dict({
+                    'anyOf': list([
+                      dict({
+                        'items': dict({
+                          'type': 'string',
+                        }),
+                        'type': 'array',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'cc': dict({
+                    'anyOf': list([
+                      dict({
+                        'items': dict({
+                          'type': 'string',
+                        }),
+                        'type': 'array',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'from_address': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'html': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'reply_to': dict({
+                    'anyOf': list([
+                      dict({
+                        'items': dict({
+                          'type': 'string',
+                        }),
+                        'type': 'array',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'scheduled_at': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'subject': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'template_id': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'text': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'to': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'items': dict({
+                          'type': 'string',
+                        }),
+                        'type': 'array',
+                      }),
+                    ]),
+                  }),
+                }),
+                'required': list([
+                  'to',
+                ]),
+                'type': 'object',
+              }),
+              'type': 'array',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'emails',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_batch_send_emails',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Batch send emails',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Bulk create contacts',
+        }),
+        'description': 'Create multiple contacts in a single request.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'contacts': dict({
+              'items': dict({
+                'additionalProperties': True,
+                'type': 'object',
+              }),
+              'type': 'array',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+            'contacts',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_bulk_create_contacts',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Bulk create contacts',
+      }),
+      dict({
+        'annotations': dict({
+          'destructiveHint': True,
+          'title': 'Bulk delete contacts',
+        }),
+        'description': 'Delete multiple contacts in a single request.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'contact_ids': dict({
+              'items': dict({
+                'type': 'string',
+              }),
+              'type': 'array',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+            'contact_ids',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_bulk_delete_contacts',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Bulk delete contacts',
+      }),
+      dict({
+        'annotations': dict({
+          'destructiveHint': True,
+          'title': 'Cancel scheduled email',
+        }),
+        'description': 'Cancel a scheduled email.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'email_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'email_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_cancel_email',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Cancel scheduled email',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Create campaign',
+        }),
+        'description': 'Create a new email campaign.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'from_address': dict({
+              'type': 'string',
+            }),
+            'html': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'name': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+            'subject': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'name',
+            'from_address',
+            'subject',
+            'contact_book_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_create_campaign',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Create campaign',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Create contact',
+        }),
+        'description': 'Create a new contact in a contact book.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'email': dict({
+              'type': 'string',
+            }),
+            'first_name': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'last_name': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'properties': dict({
+              'anyOf': list([
+                dict({
+                  'additionalProperties': True,
+                  'type': 'object',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+            'subscribed': dict({
+              'default': True,
+              'type': 'boolean',
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+            'email',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_create_contact',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Create contact',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Create contact book',
+        }),
+        'description': 'Create a new contact book.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'double_opt_in_enabled': dict({
+              'default': False,
+              'type': 'boolean',
+            }),
+            'double_opt_in_from': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'double_opt_in_subject': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'name': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'name',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_create_contact_book',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Create contact book',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Create domain',
+        }),
+        'description': 'Create a new domain. useSend requires both name and region.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'name': dict({
+              'type': 'string',
+            }),
+            'region': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'name',
+            'region',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_create_domain',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Create domain',
+      }),
+      dict({
+        'annotations': dict({
+          'destructiveHint': True,
+          'title': 'Delete campaign',
+        }),
+        'description': 'Delete a campaign.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'campaign_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'campaign_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_delete_campaign',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Delete campaign',
+      }),
+      dict({
+        'annotations': dict({
+          'destructiveHint': True,
+          'title': 'Delete contact',
+        }),
+        'description': 'Delete a contact from a contact book.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'contact_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+            'contact_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_delete_contact',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Delete contact',
+      }),
+      dict({
+        'annotations': dict({
+          'destructiveHint': True,
+          'title': 'Delete contact book',
+        }),
+        'description': 'Delete a contact book.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_delete_contact_book',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Delete contact book',
+      }),
+      dict({
+        'annotations': dict({
+          'destructiveHint': True,
+          'title': 'Delete domain',
+        }),
+        'description': 'Delete a domain.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'domain_id': dict({
+              'type': 'integer',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'domain_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_delete_domain',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Delete domain',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'Email time series',
+        }),
+        'description': '''
+          Get email volume time series analytics.
+          
+          days is "7" or "30" (default 30); domain_id optionally filters to one domain.
+        ''',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'days': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'domain_id': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_email_time_series',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Email time series',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'Get campaign',
+        }),
+        'description': 'Get details for a specific campaign.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'campaign_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'campaign_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_get_campaign',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Get campaign',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'Get contact',
+        }),
+        'description': 'Get details for a specific contact.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'contact_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+            'contact_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_get_contact',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Get contact',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'Get contact book',
+        }),
+        'description': 'Get details for a specific contact book.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_get_contact_book',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Get contact book',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'Get domain',
+        }),
+        'description': 'Get details for a specific domain.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'domain_id': dict({
+              'type': 'integer',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'domain_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_get_domain',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Get domain',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'Get email',
+        }),
+        'description': 'Get details for a specific email.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'email_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'email_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_get_email',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Get email',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'List campaigns',
+        }),
+        'description': 'List campaigns; optional status filter and name/subject search (no limit override).',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'page': dict({
+              'default': 1,
+              'type': 'integer',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+            'search': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'status': dict({
+              'anyOf': list([
+                dict({
+                  'enum': list([
+                    'DRAFT',
+                    'SCHEDULED',
+                    'RUNNING',
+                    'PAUSED',
+                    'SENT',
+                  ]),
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+          }),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_list_campaigns',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'List campaigns',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'List contact books',
+        }),
+        'description': 'List all contact books accessible by the API key (endpoint is unpaginated).',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_list_contact_books',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'List contact books',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'List contacts',
+        }),
+        'description': 'List contacts in a contact book with pagination.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'limit': dict({
+              'default': 50,
+              'type': 'integer',
+            }),
+            'page': dict({
+              'default': 1,
+              'type': 'integer',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_list_contacts',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'List contacts',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'List domains',
+        }),
+        'description': 'List all domains.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_list_domains',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'List domains',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'List emails',
+        }),
+        'description': 'List emails with pagination; optional ISO-8601 date range and domain filter.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'domain_id': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'end_date': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'limit': dict({
+              'default': 50,
+              'type': 'integer',
+            }),
+            'page': dict({
+              'default': 1,
+              'type': 'integer',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+            'start_date': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+          }),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_list_emails',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'List emails',
+      }),
+      dict({
+        'annotations': dict({
+          'destructiveHint': True,
+          'title': 'Pause campaign',
+        }),
+        'description': 'Pause a running campaign.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'campaign_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'campaign_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_pause_campaign',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Pause campaign',
+      }),
+      dict({
+        'annotations': dict({
+          'readOnlyHint': True,
+          'title': 'Reputation metrics',
+        }),
+        'description': 'Get sending reputation metrics (bounce/complaint rates), optionally for one domain.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'domain_id': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_reputation_metrics',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Reputation metrics',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Resume campaign',
+        }),
+        'description': 'Resume a paused campaign.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'campaign_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'campaign_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_resume_campaign',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Resume campaign',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Schedule campaign',
+        }),
+        'description': 'Schedule a campaign to be sent at a future time.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'campaign_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+            'scheduled_at': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'campaign_id',
+            'scheduled_at',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_schedule_campaign',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Schedule campaign',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Send email',
+        }),
+        'description': '''
+          Send a single transactional email.
+          
+          Uses USESEND_DEFAULT_FROM if from_address is omitted; subject may be omitted only
+          if template_id supplies one.
+        ''',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'bcc': dict({
+              'anyOf': list([
+                dict({
+                  'items': dict({
+                    'type': 'string',
+                  }),
+                  'type': 'array',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'cc': dict({
+              'anyOf': list([
+                dict({
+                  'items': dict({
+                    'type': 'string',
+                  }),
+                  'type': 'array',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'from_address': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'html': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'reply_to': dict({
+              'anyOf': list([
+                dict({
+                  'items': dict({
+                    'type': 'string',
+                  }),
+                  'type': 'array',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+            'scheduled_at': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'subject': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'template_id': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'text': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'to': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'items': dict({
+                    'type': 'string',
+                  }),
+                  'type': 'array',
+                }),
+              ]),
+            }),
+          }),
+          'required': list([
+            'to',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_send_email',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Send email',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Update contact',
+        }),
+        'description': "Update a contact's mutable fields.",
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'contact_id': dict({
+              'type': 'string',
+            }),
+            'first_name': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'last_name': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'properties': dict({
+              'anyOf': list([
+                dict({
+                  'additionalProperties': True,
+                  'type': 'object',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+            'subscribed': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'boolean',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+            'contact_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_update_contact',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Update contact',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Update contact book',
+        }),
+        'description': "Update a contact book's mutable fields.",
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'double_opt_in_enabled': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'boolean',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'name': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_update_contact_book',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Update contact book',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Update email schedule',
+        }),
+        'description': 'Reschedule a scheduled email.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'email_id': dict({
+              'type': 'string',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+            'scheduled_at': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'email_id',
+            'scheduled_at',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_update_email_schedule',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Update email schedule',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Upsert contact',
+        }),
+        'description': 'Create or update a contact by email (upsert).',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'contact_book_id': dict({
+              'type': 'string',
+            }),
+            'email': dict({
+              'type': 'string',
+            }),
+            'first_name': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'last_name': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'properties': dict({
+              'anyOf': list([
+                dict({
+                  'additionalProperties': True,
+                  'type': 'object',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+            'subscribed': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'boolean',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+          }),
+          'required': list([
+            'contact_book_id',
+            'email',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_upsert_contact',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Upsert contact',
+      }),
+      dict({
+        'annotations': dict({
+          'title': 'Verify domain',
+        }),
+        'description': 'Trigger verification for a domain.',
+        'inputSchema': dict({
+          'additionalProperties': False,
+          'properties': dict({
+            'domain_id': dict({
+              'type': 'integer',
+            }),
+            'response_format': dict({
+              'default': 'markdown',
+              'enum': list([
+                'markdown',
+                'json',
+              ]),
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'domain_id',
+          ]),
+          'type': 'object',
+        }),
+        'meta': dict({
+          'fastmcp': dict({
+            'tags': list([
+            ]),
+          }),
+        }),
+        'name': 'usesend_verify_domain',
+        'outputSchema': dict({
+          'properties': dict({
+            'result': dict({
+              'type': 'string',
+            }),
+          }),
+          'required': list([
+            'result',
+          ]),
+          'type': 'object',
+          'x-fastmcp-wrap-result': True,
+        }),
+        'title': 'Verify domain',
+      }),
+    ]),
+  })
+# ---

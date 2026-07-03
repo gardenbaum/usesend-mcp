@@ -1,0 +1,58 @@
+exclude: '^docs/vendor/'
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        # syrupy .ambr snapshots intentionally carry trailing whitespace inside
+        # multi-line docstring blocks; they are generated and reviewed verbatim.
+        exclude: '^tests/__snapshots__/'
+      - id: end-of-file-fixer
+        exclude: '^tests/__snapshots__/'
+      - id: check-yaml
+      - id: check-toml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        exclude: '^tests/__snapshots__/'
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.0
+    hooks:
+      - id: gitleaks
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.15
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.11.18
+    hooks:
+      - id: uv-lock
+
+  - repo: local
+    hooks:
+      - id: basedpyright
+        name: basedpyright
+        entry: uv run basedpyright
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: lint-imports
+        name: import-linter
+        entry: uv run lint-imports
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: deptry
+        name: deptry (dependency hygiene)
+        entry: uv run deptry src
+        language: system
+        pass_filenames: false
+        always_run: true

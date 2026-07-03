@@ -1,0 +1,12 @@
+# pip-audit allowlist — vulnerability IDs to suppress in the dependency-audit gate.
+#
+# One vulnerability ID per line (PYSEC-*, GHSA-*, or CVE-*). Blank lines and
+# full-line `#` comments are ignored; inline comments are NOT supported.
+#
+# Add an entry ONLY for a triaged false positive, or a vulnerability that
+# demonstrably does not apply to how usesend-mcp uses the package. Record the
+# justification, the advisory link, and the date in a comment directly above
+# the ID so the suppression can be reviewed and later removed.
+#
+# Consumed by `just audit` and the CI "Audit locked dependencies" step via
+# `pip-audit --ignore-vuln`. Keep this file empty unless an entry is justified.

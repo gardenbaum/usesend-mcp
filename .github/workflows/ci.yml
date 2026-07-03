@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Sync dependencies
+        run: uv sync --locked
+
+      - name: Ruff lint
+        run: uv run ruff check .
+
+      - name: Ruff format check
+        run: uv run ruff format --check .
+
+      - name: Type check (basedpyright)
+        run: uv run basedpyright
+
+      - name: Architecture contracts
+        run: uv run lint-imports
+
+      - name: Dependency hygiene
+        run: uv run deptry src
+
+      # Supply-chain gate: fail on known vulnerabilities in the locked deps.
+      # Mirrors the `just audit` recipe; triaged CVEs are suppressed via
+      # IDs listed in `.pip-audit-ignore`.
+      - name: Audit locked dependencies (pip-audit)
+        run: |
+          uv export --frozen --no-emit-project --no-hashes --all-groups \
+            --format requirements-txt > requirements.audit.txt
+          ignore=""
+          while read -r id; do
+            case "$id" in ''|\#*) continue ;; esac
+            ignore="$ignore --ignore-vuln=$id"
+          done < .pip-audit-ignore
+          uvx pip-audit --strict --no-deps --disable-pip --requirement requirements.audit.txt $ignore
+
+      - name: Tests + coverage
+        run: uv run pytest --cov --cov-branch --cov-report=xml --cov-report=term-missing
+
+      - name: Fetch base branch
+        run: git fetch origin "${{ github.base_ref || 'main' }}"
+
+      - name: Diff coverage (100% on changed lines)
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          # On a pull request, diff against the target branch. On a direct push to
+          # main, github.base_ref is empty and origin/main already equals the pushed
+          # HEAD, so diff against the parent commit instead — otherwise the gate would
+          # see zero changed lines and pass vacuously.
+          if [ -n "$BASE_REF" ]; then base="origin/$BASE_REF"; else base="HEAD^"; fi
+          uv run diff-cover coverage.xml --compare-branch="$base" --fail-under=100

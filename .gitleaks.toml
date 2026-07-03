@@ -1,0 +1,15 @@
+# gitleaks configuration.
+#
+# Extend the default ruleset, then allowlist the vendored third-party FastMCP
+# documentation under docs/vendor/: its example snippets contain placeholder
+# tokens (curl auth headers, sample API keys) that are not our secrets. This
+# mirrors the `exclude: '^docs/vendor/'` in .pre-commit-config.yaml so that full
+# `gitleaks dir` scans and stage-everything operations (e.g. a squash) stay clean.
+title = "usesend-mcp gitleaks config"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Vendored FastMCP docs — upstream example tokens, not project secrets"
+paths = ['''docs/vendor/''']

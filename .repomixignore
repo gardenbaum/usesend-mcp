@@ -1,0 +1,10 @@
+# Additional excludes for repomix packing (repomix also honors .gitignore).
+
+# Vendored upstream FastMCP docs — reference material only, not part of this
+# codebase. Huge (e.g. changelog.mdx alone is ~88k tokens) and would dominate
+# any pack. Refresh them with `just docs-sync`.
+docs/vendor/
+docs/fastmcp-reading-guide.md
+
+# Repomix's own output (in case it is ever generated with a tracked name).
+repomix-output.*

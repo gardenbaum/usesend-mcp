@@ -1,0 +1,27 @@
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.usesend.com/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Introduction
+
+> Fundamental concepts of Usend's API.
+
+## Base URL
+
+useSend's API is built on REST principles and is served over HTTPS. To ensure data privacy, unencrypted HTTP is not supported.
+
+The Base URL for all API endpoints is:
+
+```sh Terminal theme={null}
+https://app.usesend.com/api/
+```
+
+## Authentication
+
+Authentication to Usend's API is performed via the Authorization header with a Bearer token. To authenticate, you need to include the Authorization header with the word Bearer followed by your token in your API requests like so:
+
+```sh Terminal theme={null}
+Authorization: Bearer us_12345
+```
+
+You can create a new token/API key under your useSend [Developer Settings](https://app.usesend.com/dev-settings/api-keys).

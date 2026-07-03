@@ -1,0 +1,116 @@
+[project]
+name = "usesend-mcp"
+version = "0.1.0"
+description = "FastMCP stdio server exposing the useSend email platform over MCP."
+readme = "README.md"
+requires-python = ">=3.13"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "gardenbaum" }]
+classifiers = [
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "fastmcp>=3.4.2,<4",
+    "mcp>=1.27",
+    "httpx>=0.28.1",
+    "pydantic>=2",
+    "pydantic-settings>=2",
+]
+
+[project.scripts]
+usesend-mcp = "usesend_mcp.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.11.18,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.39.6",
+    "coverage[toml]>=7.14.1",
+    "deptry>=0.25.1",
+    "diff-cover>=10.3.0",
+    "import-linter>=2.11",
+    "pre-commit>=4.6.0",
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.4.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.15.15",
+    "syrupy>=5.3.1",
+]
+apps = ["fastmcp[apps]"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+src = ["src", "tests"]
+extend-exclude = ["docs/vendor"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "PTH", "RUF", "ASYNC", "S", "PL", "TID", "D"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S104", "D100", "D101", "D103", "PLR2004"]
+# MCP tool functions take one kwarg per API field (for client-visible schemas) — a
+# structurally wide signature, not a design smell. Scoped to components/ only.
+"src/usesend_mcp/components/*.py" = ["PLR0913"]
+
+[tool.basedpyright]
+typeCheckingMode = "strict"
+pythonVersion = "3.13"
+include = ["src", "tests"]
+venvPath = "."
+venv = ".venv"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = "--strict-markers --strict-config"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["src/usesend_mcp"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "\\.\\.\\.",
+    "raise NotImplementedError",
+]
+
+[tool.deptry]
+
+[tool.importlinter]
+root_package = "usesend_mcp"
+
+[[tool.importlinter.contracts]]
+name = "Layered architecture"
+type = "layers"
+layers = [
+    "cli",
+    "server",
+    "components",
+    "client",
+    "models",
+]
+containers = ["usesend_mcp"]
+
+[[tool.importlinter.contracts]]
+name = "Entrypoints not imported by lower layers"
+type = "forbidden"
+source_modules = ["usesend_mcp.server", "usesend_mcp.components", "usesend_mcp.client"]
+forbidden_modules = ["usesend_mcp.cli", "usesend_mcp.__main__"]
+
+# Domain independence — template; uncomment and fill once >=2 domains exist.
+# (independence has no optional-module syntax, so only add real modules.)
+# [[tool.importlinter.contracts]]
+# name = "Domain independence"
+# type = "independence"
+# modules = ["usesend_mcp.components.sales", "usesend_mcp.components.inventory"]
