@@ -25,7 +25,7 @@ dependencies = [
     "mcp>=1.27",
     "httpx>=0.28.1",
     "pydantic>=2",
-    "pydantic-settings>=2",
+    "pydantic-settings>=2.14.2",
 ]
 
 [project.urls]
