@@ -10,6 +10,7 @@
     'tools': list([
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Batch send emails',
         }),
         'description': 'Send up to 100 emails in a single request.',
@@ -20,6 +21,33 @@
               'items': dict({
                 'description': 'One item of a batch-send request.',
                 'properties': dict({
+                  'attachments': dict({
+                    'anyOf': list([
+                      dict({
+                        'items': dict({
+                          'description': 'A single email attachment (useSend openapi.json: filename + content required).',
+                          'properties': dict({
+                            'content': dict({
+                              'type': 'string',
+                            }),
+                            'filename': dict({
+                              'type': 'string',
+                            }),
+                          }),
+                          'required': list([
+                            'filename',
+                            'content',
+                          ]),
+                          'type': 'object',
+                        }),
+                        'type': 'array',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
                   'bcc': dict({
                     'anyOf': list([
                       dict({
@@ -59,7 +87,32 @@
                     ]),
                     'default': None,
                   }),
+                  'headers': dict({
+                    'anyOf': list([
+                      dict({
+                        'additionalProperties': dict({
+                          'type': 'string',
+                        }),
+                        'type': 'object',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
                   'html': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'in_reply_to_id': dict({
                     'anyOf': list([
                       dict({
                         'type': 'string',
@@ -141,6 +194,20 @@
                       }),
                     ]),
                   }),
+                  'variables': dict({
+                    'anyOf': list([
+                      dict({
+                        'additionalProperties': dict({
+                          'type': 'string',
+                        }),
+                        'type': 'object',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
                 }),
                 'required': list([
                   'to',
@@ -186,9 +253,10 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Bulk create contacts',
         }),
-        'description': 'Create multiple contacts in a single request.',
+        'description': 'Create multiple contacts in a single request (up to 1000).',
         'inputSchema': dict({
           'additionalProperties': False,
           'properties': dict({
@@ -197,7 +265,60 @@
             }),
             'contacts': dict({
               'items': dict({
-                'additionalProperties': True,
+                'description': 'One contact for bulk creation (useSend openapi.json: only email required).',
+                'properties': dict({
+                  'email': dict({
+                    'type': 'string',
+                  }),
+                  'first_name': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'last_name': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'string',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'properties': dict({
+                    'anyOf': list([
+                      dict({
+                        'additionalProperties': True,
+                        'type': 'object',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                  'subscribed': dict({
+                    'anyOf': list([
+                      dict({
+                        'type': 'boolean',
+                      }),
+                      dict({
+                        'type': 'null',
+                      }),
+                    ]),
+                    'default': None,
+                  }),
+                }),
+                'required': list([
+                  'email',
+                ]),
                 'type': 'object',
               }),
               'type': 'array',
@@ -241,6 +362,8 @@
       dict({
         'annotations': dict({
           'destructiveHint': True,
+          'idempotentHint': True,
+          'openWorldHint': True,
           'title': 'Bulk delete contacts',
         }),
         'description': 'Delete multiple contacts in a single request.',
@@ -295,6 +418,7 @@
       dict({
         'annotations': dict({
           'destructiveHint': True,
+          'openWorldHint': True,
           'title': 'Cancel scheduled email',
         }),
         'description': 'Cancel a scheduled email.',
@@ -341,14 +465,70 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Create campaign',
         }),
-        'description': 'Create a new email campaign.',
+        'description': '''
+          Create a new email campaign.
+          
+          send_now dispatches immediately; scheduled_at defers it; batch_size throttles
+          delivery. content is the editor payload, html the rendered body.
+        ''',
         'inputSchema': dict({
           'additionalProperties': False,
           'properties': dict({
+            'batch_size': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'integer',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'bcc': dict({
+              'anyOf': list([
+                dict({
+                  'items': dict({
+                    'type': 'string',
+                  }),
+                  'type': 'array',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'cc': dict({
+              'anyOf': list([
+                dict({
+                  'items': dict({
+                    'type': 'string',
+                  }),
+                  'type': 'array',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
             'contact_book_id': dict({
               'type': 'string',
+            }),
+            'content': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
             }),
             'from_address': dict({
               'type': 'string',
@@ -367,6 +547,31 @@
             'name': dict({
               'type': 'string',
             }),
+            'preview_text': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'reply_to': dict({
+              'anyOf': list([
+                dict({
+                  'items': dict({
+                    'type': 'string',
+                  }),
+                  'type': 'array',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
             'response_format': dict({
               'default': 'markdown',
               'enum': list([
@@ -374,6 +579,28 @@
                 'json',
               ]),
               'type': 'string',
+            }),
+            'scheduled_at': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'send_now': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'boolean',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
             }),
             'subject': dict({
               'type': 'string',
@@ -410,6 +637,7 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Create contact',
         }),
         'description': 'Create a new contact in a contact book.',
@@ -498,6 +726,7 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Create contact book',
         }),
         'description': 'Create a new contact book.',
@@ -570,6 +799,7 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Create domain',
         }),
         'description': 'Create a new domain. useSend requires both name and region.',
@@ -621,6 +851,8 @@
       dict({
         'annotations': dict({
           'destructiveHint': True,
+          'idempotentHint': True,
+          'openWorldHint': True,
           'title': 'Delete campaign',
         }),
         'description': 'Delete a campaign.',
@@ -668,6 +900,8 @@
       dict({
         'annotations': dict({
           'destructiveHint': True,
+          'idempotentHint': True,
+          'openWorldHint': True,
           'title': 'Delete contact',
         }),
         'description': 'Delete a contact from a contact book.',
@@ -719,6 +953,8 @@
       dict({
         'annotations': dict({
           'destructiveHint': True,
+          'idempotentHint': True,
+          'openWorldHint': True,
           'title': 'Delete contact book',
         }),
         'description': 'Delete a contact book.',
@@ -766,6 +1002,8 @@
       dict({
         'annotations': dict({
           'destructiveHint': True,
+          'idempotentHint': True,
+          'openWorldHint': True,
           'title': 'Delete domain',
         }),
         'description': 'Delete a domain.',
@@ -812,6 +1050,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'Email time series',
         }),
@@ -879,6 +1119,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'Get campaign',
         }),
@@ -926,6 +1168,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'Get contact',
         }),
@@ -977,6 +1221,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'Get contact book',
         }),
@@ -1024,6 +1270,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'Get domain',
         }),
@@ -1071,6 +1319,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'Get email',
         }),
@@ -1118,6 +1368,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'List campaigns',
         }),
@@ -1192,6 +1444,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'List contact books',
         }),
@@ -1233,6 +1487,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'List contacts',
         }),
@@ -1288,6 +1544,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'List domains',
         }),
@@ -1329,6 +1587,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'List emails',
         }),
@@ -1412,6 +1672,7 @@
       dict({
         'annotations': dict({
           'destructiveHint': True,
+          'openWorldHint': True,
           'title': 'Pause campaign',
         }),
         'description': 'Pause a running campaign.',
@@ -1458,6 +1719,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'readOnlyHint': True,
           'title': 'Reputation metrics',
         }),
@@ -1510,6 +1773,7 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Resume campaign',
         }),
         'description': 'Resume a paused campaign.',
@@ -1556,6 +1820,7 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Schedule campaign',
         }),
         'description': 'Schedule a campaign to be sent at a future time.',
@@ -1606,17 +1871,46 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Send email',
         }),
         'description': '''
           Send a single transactional email.
           
           Uses USESEND_DEFAULT_FROM if from_address is omitted; subject may be omitted only
-          if template_id supplies one.
+          if template_id supplies one. variables fill template placeholders; attachments carry
+          base64 content; in_reply_to_id threads a reply.
         ''',
         'inputSchema': dict({
           'additionalProperties': False,
           'properties': dict({
+            'attachments': dict({
+              'anyOf': list([
+                dict({
+                  'items': dict({
+                    'description': 'A single email attachment (useSend openapi.json: filename + content required).',
+                    'properties': dict({
+                      'content': dict({
+                        'type': 'string',
+                      }),
+                      'filename': dict({
+                        'type': 'string',
+                      }),
+                    }),
+                    'required': list([
+                      'filename',
+                      'content',
+                    ]),
+                    'type': 'object',
+                  }),
+                  'type': 'array',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
             'bcc': dict({
               'anyOf': list([
                 dict({
@@ -1656,7 +1950,32 @@
               ]),
               'default': None,
             }),
+            'headers': dict({
+              'anyOf': list([
+                dict({
+                  'additionalProperties': dict({
+                    'type': 'string',
+                  }),
+                  'type': 'object',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
             'html': dict({
+              'anyOf': list([
+                dict({
+                  'type': 'string',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
+            'in_reply_to_id': dict({
               'anyOf': list([
                 dict({
                   'type': 'string',
@@ -1746,6 +2065,20 @@
                 }),
               ]),
             }),
+            'variables': dict({
+              'anyOf': list([
+                dict({
+                  'additionalProperties': dict({
+                    'type': 'string',
+                  }),
+                  'type': 'object',
+                }),
+                dict({
+                  'type': 'null',
+                }),
+              ]),
+              'default': None,
+            }),
           }),
           'required': list([
             'to',
@@ -1775,6 +2108,7 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Update contact',
         }),
         'description': "Update a contact's mutable fields.",
@@ -1870,6 +2204,7 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Update contact book',
         }),
         'description': "Update a contact book's mutable fields.",
@@ -1938,6 +2273,7 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Update email schedule',
         }),
         'description': 'Reschedule a scheduled email.',
@@ -1988,6 +2324,7 @@
       }),
       dict({
         'annotations': dict({
+          'openWorldHint': True,
           'title': 'Upsert contact',
         }),
         'description': 'Create or update a contact by email (upsert).',
@@ -2083,6 +2420,8 @@
       }),
       dict({
         'annotations': dict({
+          'idempotentHint': True,
+          'openWorldHint': True,
           'title': 'Verify domain',
         }),
         'description': 'Trigger verification for a domain.',

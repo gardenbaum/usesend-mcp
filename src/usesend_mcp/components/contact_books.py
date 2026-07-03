@@ -28,7 +28,11 @@ def _compact(**kwargs: Any) -> dict[str, Any]:
     return {_to_camel_case(key): value for key, value in kwargs.items() if value is not None}
 
 
-@provider.tool(annotations=ToolAnnotations(title="List contact books", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="List contact books", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_list_contact_books(
     ctx: Context, response_format: ResponseFormat = "markdown"
@@ -38,7 +42,11 @@ async def usesend_list_contact_books(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Get contact book", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Get contact book", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_get_contact_book(
     ctx: Context, contact_book_id: str, response_format: ResponseFormat = "markdown"
@@ -48,7 +56,7 @@ async def usesend_get_contact_book(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Create contact book"))
+@provider.tool(annotations=ToolAnnotations(title="Create contact book", openWorldHint=True))
 @map_domain_errors
 async def usesend_create_contact_book(
     ctx: Context,
@@ -69,7 +77,7 @@ async def usesend_create_contact_book(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Update contact book"))
+@provider.tool(annotations=ToolAnnotations(title="Update contact book", openWorldHint=True))
 @map_domain_errors
 async def usesend_update_contact_book(
     ctx: Context,
@@ -84,7 +92,11 @@ async def usesend_update_contact_book(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Delete contact book", destructiveHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Delete contact book", destructiveHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_delete_contact_book(
     ctx: Context, contact_book_id: str, response_format: ResponseFormat = "markdown"

@@ -134,6 +134,31 @@ async def test_bulk_create_contacts_body_is_bare_array() -> None:
     assert seen["body"] == contacts
 
 
+async def test_bulk_create_contacts_serializes_typed_items() -> None:
+    """Typed ContactInput items camelCase their keys and drop None (subscribed=False kept)."""
+    seen: dict[str, Any] = {}
+
+    def handler(req: httpx.Request) -> httpx.Response:
+        seen["body"] = json.loads(req.content)
+        return httpx.Response(200, json={"id": "c_1"})
+
+    await _call(
+        handler,
+        "usesend_bulk_create_contacts",
+        {
+            "contact_book_id": "cb_1",
+            "contacts": [
+                {"email": "a@x.io", "first_name": "Ada", "subscribed": False},
+                {"email": "b@x.io"},
+            ],
+        },
+    )
+    assert seen["body"] == [
+        {"email": "a@x.io", "firstName": "Ada", "subscribed": False},
+        {"email": "b@x.io"},
+    ]
+
+
 async def test_bulk_delete_contacts_body_wraps_ids() -> None:
     seen: dict[str, Any] = {}
 

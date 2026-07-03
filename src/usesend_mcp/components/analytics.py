@@ -28,7 +28,11 @@ def _compact(**kwargs: Any) -> dict[str, Any]:
     return {_to_camel_case(key): value for key, value in kwargs.items() if value is not None}
 
 
-@provider.tool(annotations=ToolAnnotations(title="Email time series", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Email time series", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_email_time_series(
     ctx: Context,
@@ -45,7 +49,11 @@ async def usesend_email_time_series(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Reputation metrics", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Reputation metrics", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_reputation_metrics(
     ctx: Context, domain_id: str | None = None, response_format: ResponseFormat = "markdown"

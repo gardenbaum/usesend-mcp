@@ -16,7 +16,11 @@ def _client(ctx: Context) -> Any:
     return ctx.lifespan_context["usesend"]
 
 
-@provider.tool(annotations=ToolAnnotations(title="List domains", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="List domains", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_list_domains(ctx: Context, response_format: ResponseFormat = "markdown") -> str:
     """List all domains."""
@@ -24,7 +28,11 @@ async def usesend_list_domains(ctx: Context, response_format: ResponseFormat = "
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Get domain", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Get domain", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_get_domain(
     ctx: Context, domain_id: int, response_format: ResponseFormat = "markdown"
@@ -34,7 +42,7 @@ async def usesend_get_domain(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Create domain"))
+@provider.tool(annotations=ToolAnnotations(title="Create domain", openWorldHint=True))
 @map_domain_errors
 async def usesend_create_domain(
     ctx: Context,
@@ -47,7 +55,9 @@ async def usesend_create_domain(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Verify domain"))
+@provider.tool(
+    annotations=ToolAnnotations(title="Verify domain", idempotentHint=True, openWorldHint=True)
+)
 @map_domain_errors
 async def usesend_verify_domain(
     ctx: Context, domain_id: int, response_format: ResponseFormat = "markdown"
@@ -57,7 +67,11 @@ async def usesend_verify_domain(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Delete domain", destructiveHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Delete domain", destructiveHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_delete_domain(
     ctx: Context, domain_id: int, response_format: ResponseFormat = "markdown"

@@ -8,6 +8,7 @@ from typing import Any
 import httpx
 import pytest
 from fastmcp import Client, FastMCP
+from fastmcp.exceptions import ToolError
 
 from tests.conftest import Handler, make_test_lifespan
 from usesend_mcp.client.usesend_client import UsesendClient
@@ -158,3 +159,48 @@ async def test_list_emails_omits_optional_filters_when_absent() -> None:
     assert "startDate" not in params
     assert "endDate" not in params
     assert "domainId" not in params
+
+
+async def test_send_forwards_extended_fields() -> None:
+    """variables/headers/inReplyToId map to camelCase; attachments serialize to dicts."""
+    seen: dict[str, Any] = {}
+
+    def handler(req: httpx.Request) -> httpx.Response:
+        seen["body"] = json.loads(req.content)
+        return httpx.Response(200, json={"id": "e_1"})
+
+    await _call(
+        handler,
+        "usesend_send_email",
+        {
+            "to": "a@x.io",
+            "from_address": "s@x.io",
+            "template_id": "tmpl_1",
+            "variables": {"name": "Ada"},
+            "headers": {"X-Entity": "42"},
+            "in_reply_to_id": "e_0",
+            "attachments": [{"filename": "a.txt", "content": "aGk="}],
+        },
+    )
+    body = seen["body"]
+    assert body["variables"] == {"name": "Ada"}
+    assert body["headers"] == {"X-Entity": "42"}
+    assert body["inReplyToId"] == "e_0"
+    assert body["attachments"] == [{"filename": "a.txt", "content": "aGk="}]
+
+
+async def test_batch_rejects_empty_list() -> None:
+    def handler(req: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={})
+
+    with pytest.raises(ToolError, match="Mindestens eine"):
+        await _call(handler, "usesend_batch_send_emails", {"emails": []})
+
+
+async def test_batch_rejects_more_than_100() -> None:
+    def handler(req: httpx.Request) -> httpx.Response:
+        return httpx.Response(200, json={})
+
+    emails = [{"to": "a@x.io", "subject": "s", "text": "t"}] * 101
+    with pytest.raises(ToolError, match="Maximal 100"):
+        await _call(handler, "usesend_batch_send_emails", {"emails": emails})

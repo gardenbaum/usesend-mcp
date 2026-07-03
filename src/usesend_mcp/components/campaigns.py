@@ -31,7 +31,7 @@ def _compact(**kwargs: Any) -> dict[str, Any]:
 CampaignStatus = Literal["DRAFT", "SCHEDULED", "RUNNING", "PAUSED", "SENT"]
 
 
-@provider.tool(annotations=ToolAnnotations(title="Create campaign"))
+@provider.tool(annotations=ToolAnnotations(title="Create campaign", openWorldHint=True))
 @map_domain_errors
 async def usesend_create_campaign(
     ctx: Context,
@@ -40,21 +40,45 @@ async def usesend_create_campaign(
     subject: str,
     contact_book_id: str,
     html: str | None = None,
+    preview_text: str | None = None,
+    content: str | None = None,
+    reply_to: list[str] | None = None,
+    cc: list[str] | None = None,
+    bcc: list[str] | None = None,
+    send_now: bool | None = None,
+    scheduled_at: str | None = None,
+    batch_size: int | None = None,
     response_format: ResponseFormat = "markdown",
 ) -> str:
-    """Create a new email campaign."""
+    """Create a new email campaign.
+
+    send_now dispatches immediately; scheduled_at defers it; batch_size throttles
+    delivery. content is the editor payload, html the rendered body.
+    """
     body = _compact(
         name=name,
         subject=subject,
         contact_book_id=contact_book_id,
         html=html,
+        preview_text=preview_text,
+        content=content,
+        reply_to=reply_to,
+        cc=cc,
+        bcc=bcc,
+        send_now=send_now,
+        scheduled_at=scheduled_at,
+        batch_size=batch_size,
     )
     body["from"] = from_address  # useSend's field is "from", not the camelCase "fromAddress"
     data = await _client(ctx).request("POST", "/v1/campaigns", json=body)
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Get campaign", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Get campaign", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_get_campaign(
     ctx: Context, campaign_id: str, response_format: ResponseFormat = "markdown"
@@ -64,7 +88,11 @@ async def usesend_get_campaign(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="List campaigns", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="List campaigns", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_list_campaigns(
     ctx: Context,
@@ -79,7 +107,11 @@ async def usesend_list_campaigns(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Delete campaign", destructiveHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Delete campaign", destructiveHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_delete_campaign(
     ctx: Context, campaign_id: str, response_format: ResponseFormat = "markdown"
@@ -89,7 +121,9 @@ async def usesend_delete_campaign(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Pause campaign", destructiveHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(title="Pause campaign", destructiveHint=True, openWorldHint=True)
+)
 @map_domain_errors
 async def usesend_pause_campaign(
     ctx: Context, campaign_id: str, response_format: ResponseFormat = "markdown"
@@ -99,7 +133,7 @@ async def usesend_pause_campaign(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Resume campaign"))
+@provider.tool(annotations=ToolAnnotations(title="Resume campaign", openWorldHint=True))
 @map_domain_errors
 async def usesend_resume_campaign(
     ctx: Context, campaign_id: str, response_format: ResponseFormat = "markdown"
@@ -109,7 +143,7 @@ async def usesend_resume_campaign(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Schedule campaign"))
+@provider.tool(annotations=ToolAnnotations(title="Schedule campaign", openWorldHint=True))
 @map_domain_errors
 async def usesend_schedule_campaign(
     ctx: Context, campaign_id: str, scheduled_at: str, response_format: ResponseFormat = "markdown"

@@ -10,6 +10,7 @@ from mcp.types import ToolAnnotations
 
 from usesend_mcp.errors import map_domain_errors
 from usesend_mcp.formatting import ResponseFormat, format_response
+from usesend_mcp.models.contacts import ContactInput
 
 provider = LocalProvider()
 
@@ -33,7 +34,11 @@ def _base(contact_book_id: str) -> str:
     return f"/v1/contactBooks/{contact_book_id}/contacts"
 
 
-@provider.tool(annotations=ToolAnnotations(title="List contacts", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="List contacts", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_list_contacts(
     ctx: Context,
@@ -49,7 +54,11 @@ async def usesend_list_contacts(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Get contact", readOnlyHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Get contact", readOnlyHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_get_contact(
     ctx: Context,
@@ -62,7 +71,7 @@ async def usesend_get_contact(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Create contact"))
+@provider.tool(annotations=ToolAnnotations(title="Create contact", openWorldHint=True))
 @map_domain_errors
 async def usesend_create_contact(
     ctx: Context,
@@ -86,7 +95,7 @@ async def usesend_create_contact(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Update contact"))
+@provider.tool(annotations=ToolAnnotations(title="Update contact", openWorldHint=True))
 @map_domain_errors
 async def usesend_update_contact(
     ctx: Context,
@@ -109,7 +118,7 @@ async def usesend_update_contact(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Upsert contact"))
+@provider.tool(annotations=ToolAnnotations(title="Upsert contact", openWorldHint=True))
 @map_domain_errors
 async def usesend_upsert_contact(
     ctx: Context,
@@ -137,7 +146,11 @@ async def usesend_upsert_contact(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Delete contact", destructiveHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Delete contact", destructiveHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_delete_contact(
     ctx: Context,
@@ -150,20 +163,25 @@ async def usesend_delete_contact(
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Bulk create contacts"))
+@provider.tool(annotations=ToolAnnotations(title="Bulk create contacts", openWorldHint=True))
 @map_domain_errors
 async def usesend_bulk_create_contacts(
     ctx: Context,
     contact_book_id: str,
-    contacts: list[dict[str, object]],
+    contacts: list[ContactInput],
     response_format: ResponseFormat = "markdown",
 ) -> str:
-    """Create multiple contacts in a single request."""
-    data = await _client(ctx).request("POST", f"{_base(contact_book_id)}/bulk", json=contacts)
+    """Create multiple contacts in a single request (up to 1000)."""
+    payload = [_compact(**item.model_dump()) for item in contacts]
+    data = await _client(ctx).request("POST", f"{_base(contact_book_id)}/bulk", json=payload)
     return format_response(data, response_format)
 
 
-@provider.tool(annotations=ToolAnnotations(title="Bulk delete contacts", destructiveHint=True))
+@provider.tool(
+    annotations=ToolAnnotations(
+        title="Bulk delete contacts", destructiveHint=True, idempotentHint=True, openWorldHint=True
+    )
+)
 @map_domain_errors
 async def usesend_bulk_delete_contacts(
     ctx: Context,
