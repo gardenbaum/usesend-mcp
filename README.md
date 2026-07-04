@@ -1,7 +1,7 @@
 # usesend-mcp
 
 [![CI](https://github.com/gardenbaum/usesend-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/gardenbaum/usesend-mcp/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/usesend-mcp.svg)](https://pypi.org/project/usesend-mcp/)
+[![PyPI](https://img.shields.io/pypi/v/usesend-mcp?logo=pypi&logoColor=white)](https://pypi.org/project/usesend-mcp/)
 [![Docker Hub](https://img.shields.io/badge/docker%20hub-gardenbaum%2Fusesend--mcp-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/gardenbaum/usesend-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
