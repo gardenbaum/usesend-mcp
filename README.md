@@ -4,48 +4,15 @@
 [![PyPI](https://img.shields.io/pypi/v/usesend-mcp.svg)](https://pypi.org/project/usesend-mcp/)
 [![Docker Hub](https://img.shields.io/docker/v/gardenbaum/usesend-mcp?logo=docker&label=docker%20hub&sort=semver)](https://hub.docker.com/r/gardenbaum/usesend-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/release/python-3130/)
-[![uv](https://img.shields.io/badge/package%20manager-uv-de5fe9)](https://docs.astral.sh/uv/)
+[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
 
-A [Model Context Protocol](https://modelcontextprotocol.io) server exposing the [useSend](https://usesend.com) email platform to MCP clients over stdio.
+An [MCP](https://modelcontextprotocol.io) server for the [useSend](https://usesend.com) email platform (an open-source Resend/Postmark alternative). It gives any MCP client — Claude, Cursor, VS Code, Windsurf, Codex — **33 tools** for transactional email, contacts, campaigns, domains, and analytics, over stdio.
 
-## Overview
+## Setup
 
-[useSend](https://usesend.com) is an open-source email sending platform (a self-hosted alternative to Resend/Postmark) covering transactional email, contact/audience management, and marketing campaigns.
+**1. Get a useSend API key** (`us_…`) from **Settings → API Keys** at [app.usesend.com](https://app.usesend.com) (or your self-hosted instance).
 
-**usesend-mcp** is a [FastMCP](https://gofastmcp.com) server that wraps the useSend REST API as 33 MCP tools across six domains: emails, contact books, contacts, campaigns, domains, and analytics. It speaks **stdio only** — no HTTP server, no ports to expose — so it runs as a subprocess launched directly by your MCP client.
-
-## Quick Start
-
-### uvx (recommended)
-
-```bash
-USESEND_API_KEY=us_your_api_key_here uvx usesend-mcp
-```
-
-`uvx` downloads and runs the [`usesend-mcp`](https://pypi.org/project/usesend-mcp/) package from PyPI on the fly — no local install required.
-
-### Docker
-
-```bash
-docker run -i --rm -e USESEND_API_KEY=us_your_api_key_here gardenbaum/usesend-mcp
-```
-
-The `-i` flag is required: MCP over stdio needs an interactive stdin/stdout stream, and `--rm` cleans up the container on exit.
-
-Images are published to [Docker Hub](https://hub.docker.com/r/gardenbaum/usesend-mcp) (`gardenbaum/usesend-mcp`) and mirrored to the GitHub Container Registry (`ghcr.io/gardenbaum/usesend-mcp`), for `linux/amd64` and `linux/arm64`.
-
-## API key
-
-All tools authenticate with a useSend API key (format `us_...`). Create one from your useSend dashboard at [app.usesend.com](https://app.usesend.com) (or your self-hosted instance) under **Settings → API Keys**, then set it as `USESEND_API_KEY`.
-
-## IDE / client integration
-
-Every client below launches the server the same way — `uvx usesend-mcp` with `USESEND_API_KEY` in the environment — only the config file and location differ. Replace `us_your_api_key_here` with your real key.
-
-### Claude Code / Claude Desktop
-
-Add to `.mcp.json` (project) or `claude_desktop_config.json` (Desktop app):
+**2. Add the server to your MCP client.** Almost every client uses the same JSON — paste this in and swap in your key:
 
 ```json
 {
@@ -53,102 +20,37 @@ Add to `.mcp.json` (project) or `claude_desktop_config.json` (Desktop app):
     "usesend": {
       "command": "uvx",
       "args": ["usesend-mcp"],
-      "env": {
-        "USESEND_API_KEY": "us_your_api_key_here"
-      }
+      "env": { "USESEND_API_KEY": "us_your_api_key_here" }
     }
   }
 }
 ```
 
-Or via the Claude Code CLI:
+`uvx` (from [uv](https://docs.astral.sh/uv/)) downloads and runs the server from PyPI on demand — nothing to install first.
+
+**Where does that JSON go?**
+
+| Client | Config file |
+|---|---|
+| Claude Code | `.mcp.json` (project root) |
+| Claude Desktop | `claude_desktop_config.json` |
+| Cursor | `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` |
+| VS Code (Cline) | `cline_mcp_settings.json` |
+| Windsurf | `~/.codeium/windsurf/mcp_config.json` |
+
+Prefer the command line?
 
 ```bash
-claude mcp add usesend --env USESEND_API_KEY=us_your_api_key_here -- uvx usesend-mcp
+claude mcp add usesend --env USESEND_API_KEY=us_your_api_key_here -- uvx usesend-mcp   # Claude Code
+codex  mcp add usesend --env USESEND_API_KEY=us_your_api_key_here -- uvx usesend-mcp   # Codex CLI
 ```
 
-### Cursor
+Done — ask your assistant *"list my useSend contact books"* or *"send a welcome email to jane@example.com"* to check it works.
 
-Add to `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
+<details>
+<summary><b>Run with Docker instead of uvx</b></summary>
 
-```json
-{
-  "mcpServers": {
-    "usesend": {
-      "command": "uvx",
-      "args": ["usesend-mcp"],
-      "env": {
-        "USESEND_API_KEY": "us_your_api_key_here"
-      }
-    }
-  }
-}
-```
-
-### VS Code (Cline)
-
-Add to Cline's `cline_mcp_settings.json` (via **Cline → MCP Servers → Configure MCP Servers**):
-
-```json
-{
-  "mcpServers": {
-    "usesend": {
-      "command": "uvx",
-      "args": ["usesend-mcp"],
-      "env": {
-        "USESEND_API_KEY": "us_your_api_key_here"
-      }
-    }
-  }
-}
-```
-
-### Windsurf
-
-Add to `~/.codeium/windsurf/mcp_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "usesend": {
-      "command": "uvx",
-      "args": ["usesend-mcp"],
-      "env": {
-        "USESEND_API_KEY": "us_your_api_key_here"
-      }
-    }
-  }
-}
-```
-
-### Codex CLI
-
-Codex CLI reads MCP server config from `~/.codex/config.toml` (TOML, not JSON):
-
-```toml
-[mcp_servers.usesend]
-command = "uvx"
-args = ["usesend-mcp"]
-env = { USESEND_API_KEY = "us_your_api_key_here" }
-```
-
-Or via the CLI:
-
-```bash
-codex mcp add usesend --env USESEND_API_KEY=us_your_api_key_here -- uvx usesend-mcp
-```
-
-### MCP Inspector
-
-```bash
-USESEND_API_KEY=us_your_api_key_here npx @modelcontextprotocol/inspector uvx usesend-mcp
-```
-
-Inspector also accepts the same `mcpServers` JSON shape used above via `--config <file> --server usesend`.
-
-### Docker variant
-
-Any of the JSON-based clients above can run the server from the container image instead of `uvx`:
+Use the published image in any JSON config above:
 
 ```json
 {
@@ -156,19 +58,39 @@ Any of the JSON-based clients above can run the server from the container image 
     "usesend": {
       "command": "docker",
       "args": ["run", "-i", "--rm", "-e", "USESEND_API_KEY", "gardenbaum/usesend-mcp"],
-      "env": {
-        "USESEND_API_KEY": "us_your_api_key_here"
-      }
+      "env": { "USESEND_API_KEY": "us_your_api_key_here" }
     }
   }
 }
 ```
 
-`-e USESEND_API_KEY` (no `=value`) tells Docker to forward the variable from its own environment — which the MCP client populates from the `env` block above — into the container.
+Or run it directly (`-i` keeps stdin open for the stdio protocol, `--rm` cleans up on exit):
 
-## Available tools
+```bash
+docker run -i --rm -e USESEND_API_KEY=us_your_api_key_here gardenbaum/usesend-mcp
+```
 
-Every tool below also accepts an optional `response_format` parameter (`"markdown"` default, or `"json"` for machine-readable output).
+Images: [`gardenbaum/usesend-mcp`](https://hub.docker.com/r/gardenbaum/usesend-mcp) on Docker Hub, mirrored to `ghcr.io/gardenbaum/usesend-mcp` — `linux/amd64` + `linux/arm64`.
+</details>
+
+## Configuration
+
+Environment variables (prefix `USESEND_`, also read from a `.env` file):
+
+| Variable | Default | Description |
+|---|---|---|
+| `USESEND_API_KEY` | _(required)_ | API key, format `us_…`. |
+| `USESEND_BASE_URL` | `https://app.usesend.com` | API base URL; change for a self-hosted instance. |
+| `USESEND_DEFAULT_FROM` | _(unset)_ | Default sender for `send_email` / `batch_send_emails`. |
+| `USESEND_LOG_LEVEL` | `INFO` | Log verbosity (`DEBUG` … `CRITICAL`). |
+| `USESEND_TIMEOUT` | `30` | HTTP request timeout, in seconds. |
+
+## Tools
+
+**33 tools across 6 domains.** Every tool also accepts an optional `response_format` (`"markdown"` default, or `"json"` for machine-readable output).
+
+<details>
+<summary><b>Full tool list</b></summary>
 
 ### Emails (6)
 
@@ -176,7 +98,7 @@ Every tool below also accepts an optional `response_format` parameter (`"markdow
 |---|---|
 | `usesend_send_email` | Send a single transactional email (falls back to `USESEND_DEFAULT_FROM` if `from_address` is omitted). |
 | `usesend_batch_send_emails` | Send up to 100 emails in a single request. |
-| `usesend_list_emails` | List emails with pagination (`page`, `limit`); optional `start_date`/`end_date` (ISO-8601) and `domain_id` filters. |
+| `usesend_list_emails` | List emails with pagination; optional `start_date`/`end_date` (ISO-8601) and `domain_id` filters. |
 | `usesend_get_email` | Get details for a specific email. |
 | `usesend_cancel_email` | Cancel a scheduled email. |
 | `usesend_update_email_schedule` | Reschedule a scheduled email. |
@@ -185,9 +107,9 @@ Every tool below also accepts an optional `response_format` parameter (`"markdow
 
 | Tool | Description |
 |---|---|
-| `usesend_list_contact_books` | List all contact books accessible by the API key (unpaginated). |
+| `usesend_list_contact_books` | List all contact books accessible by the API key. |
 | `usesend_get_contact_book` | Get details for a specific contact book. |
-| `usesend_create_contact_book` | Create a new contact book, optionally with double opt-in. |
+| `usesend_create_contact_book` | Create a contact book, optionally with double opt-in. |
 | `usesend_update_contact_book` | Update a contact book's name or double opt-in setting. |
 | `usesend_delete_contact_book` | Delete a contact book. |
 
@@ -195,9 +117,9 @@ Every tool below also accepts an optional `response_format` parameter (`"markdow
 
 | Tool | Description |
 |---|---|
-| `usesend_list_contacts` | List contacts in a contact book with pagination (`page`, `limit`). |
+| `usesend_list_contacts` | List contacts in a contact book, with pagination. |
 | `usesend_get_contact` | Get details for a specific contact. |
-| `usesend_create_contact` | Create a new contact in a contact book. |
+| `usesend_create_contact` | Create a contact in a contact book. |
 | `usesend_update_contact` | Update a contact's mutable fields. |
 | `usesend_upsert_contact` | Create or update a contact by email address. |
 | `usesend_delete_contact` | Delete a contact from a contact book. |
@@ -208,13 +130,13 @@ Every tool below also accepts an optional `response_format` parameter (`"markdow
 
 | Tool | Description |
 |---|---|
-| `usesend_create_campaign` | Create a new email campaign (`name`, `from_address`, `subject`, `contact_book_id`, optional `html`). |
+| `usesend_create_campaign` | Create an email campaign. |
 | `usesend_get_campaign` | Get details for a specific campaign. |
-| `usesend_list_campaigns` | List campaigns (`page`; optional `status` — `DRAFT`/`SCHEDULED`/`RUNNING`/`PAUSED`/`SENT` — and `search` over name/subject; no `limit` override). |
+| `usesend_list_campaigns` | List campaigns; optional `status` and `search` filters. |
 | `usesend_delete_campaign` | Delete a campaign. |
 | `usesend_pause_campaign` | Pause a running campaign. |
 | `usesend_resume_campaign` | Resume a paused campaign. |
-| `usesend_schedule_campaign` | Schedule a campaign to be sent at a future time. |
+| `usesend_schedule_campaign` | Schedule a campaign for a future time. |
 
 ### Domains (5)
 
@@ -222,7 +144,7 @@ Every tool below also accepts an optional `response_format` parameter (`"markdow
 |---|---|
 | `usesend_list_domains` | List all domains. |
 | `usesend_get_domain` | Get details for a specific domain. |
-| `usesend_create_domain` | Create a new domain (`name` and `region` are both required). |
+| `usesend_create_domain` | Create a domain (`name` and `region` required). |
 | `usesend_verify_domain` | Trigger DNS verification for a domain. |
 | `usesend_delete_domain` | Delete a domain. |
 
@@ -230,52 +152,24 @@ Every tool below also accepts an optional `response_format` parameter (`"markdow
 
 | Tool | Description |
 |---|---|
-| `usesend_email_time_series` | Get email volume time series analytics (`days`: `"7"` or `"30"`, default 30; optional `domain_id` filter). |
-| `usesend_reputation_metrics` | Get sending reputation metrics (bounce/complaint rates); optional `domain_id` filter. |
+| `usesend_email_time_series` | Email volume time series (`days`: `"7"` or `"30"`); optional `domain_id`. |
+| `usesend_reputation_metrics` | Sending reputation metrics (bounce/complaint rates); optional `domain_id`. |
 
-## Configuration
-
-All settings are environment variables with the `USESEND_` prefix (also loadable from a `.env` file).
-
-| Variable | Default | Description |
-|---|---|---|
-| `USESEND_API_KEY` | _(required)_ | useSend API key, format `us_...`. |
-| `USESEND_BASE_URL` | `https://app.usesend.com` | Base URL of the useSend API; override for a self-hosted instance. |
-| `USESEND_DEFAULT_FROM` | _(unset)_ | Default sender address used by `usesend_send_email` / `usesend_batch_send_emails` when `from_address` is omitted. |
-| `USESEND_LOG_LEVEL` | `INFO` | Log verbosity (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`). |
-| `USESEND_TIMEOUT` | `30` | HTTP request timeout to the useSend API, in seconds. |
-
-## Example prompts
-
-- "Send an email to jane@example.com with subject 'Welcome' and a short greeting."
-- "List my contact books."
-- "Show email stats for the last 7 days."
-- "Create a contact book called 'Newsletter' with double opt-in enabled."
-- "Pause campaign abc123 and reschedule it for next Monday at 9am."
-- "What's our current sender reputation?"
+</details>
 
 ## Development
 
 ```bash
-uv sync --dev          # install runtime + dev dependencies
-just check             # lint + format-check + typecheck + import contracts + tests w/ 100% diff coverage
-just docs-sync-all     # refresh vendored FastMCP docs + useSend OpenAPI spec
+uv sync --dev      # install runtime + dev dependencies
+just check         # lint, format, types, import contracts, tests @ 100% diff coverage
 ```
 
-The server communicates over stdio, so `stdout` is reserved exclusively for the MCP protocol — all logs (structured JSON) are written to `stderr`.
+Work happens on `dev`; `main` is the release branch (push a `v*` tag to publish). Architectural
+decisions are recorded as ADRs in [`docs/adr/`](docs/adr/). Logs go to `stderr` — `stdout` is
+reserved for the MCP protocol.
 
-Architecturally significant decisions are recorded as lightweight ADRs in [`docs/adr/`](docs/adr/).
+## Contributing · Security · License
 
-## Contributing
-
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for the
-development setup and quality bar, and note our [Code of Conduct](CODE_OF_CONDUCT.md).
-
-## Security
-
-Please report vulnerabilities privately — see [SECURITY.md](SECURITY.md). Do **not**
-open a public issue for security problems.
-
-## License
-
-[MIT](LICENSE) © gardenbaum
+Contributions welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
+Report vulnerabilities privately via [SECURITY.md](SECURITY.md), not public issues.
+Licensed under [MIT](LICENSE) © gardenbaum.
