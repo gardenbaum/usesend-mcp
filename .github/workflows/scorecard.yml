@@ -5,7 +5,7 @@ on:
   schedule:
     - cron: "31 5 * * 1" # weekly, Monday 05:31 UTC
   push:
-    branches: [main]
+    branches: [dev] # Scorecard only analyses the default branch (now dev)
 
 permissions:
   contents: read
